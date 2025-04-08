@@ -2,12 +2,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword} from 'react-firebase-hooks/auth'
-import {auth} from '@/app/firebase/config'
+import { auth, db } from '@/app/firebase/config'
+import { doc, setDoc } from "firebase/firestore";
 
 export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [cPassword, setCPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
@@ -17,14 +19,29 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleSignUp = async () => {
+    if(firstName == '' || lastName == '' || email == '' || password == '' || cPassword == ''){
+      alert("You have to fill all inputs")
+      return
+    }
+    if(password !== cPassword){
+      alert("passwords must match")
+      return
+    }
     try {
-        const res = await createUserWithEmailAndPassword(email, password)
-        console.log({res})
+        const userCredential = await createUserWithEmailAndPassword(email, password)
+        console.log({userCredential})
+        const user = userCredential?.user
+        await setDoc(doc(db, "users", user!.uid), {
+          first_name: firstName,
+          last_name: lastName,
+          email: user?.email
+        });
         setEmail('')
         setPassword('')
         router.push("/")
     }
     catch (e){
+        alert("something went wrong, maybe try a different email")
         console.error(e)
     }
   }
@@ -54,12 +71,14 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="First Name"
+                onChange={(e) => setFirstName(e.target.value)}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
 
               <input
                 type="text"
                 placeholder="Last Name"
+                onChange={(e) => setLastName(e.target.value)}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
             </>
@@ -83,6 +102,7 @@ export default function LoginPage() {
             <input
               type="password"
               placeholder="Confirm Password"
+              onChange={(e) => setCPassword(e.target.value)}
               className="block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           )}

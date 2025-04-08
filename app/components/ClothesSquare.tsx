@@ -1,3 +1,4 @@
+import Image from "next/image";
 
 
 type MyComponentProps = {
@@ -8,7 +9,7 @@ const ClothesSquare: React.FC<MyComponentProps> = ({num}) => {
     return (
         <>
             <div className="relative w-full h-64 overflow-hidden">
-                <img src={`/drawn-clothes.jpg`} alt={`Product ${num}`} className="transition-transform duration-300 group-hover:scale-110" />
+                <Image src={`/drawn-clothes.jpg`} alt={`Product ${num}`} className="transition-transform duration-300 group-hover:scale-110" />
             </div>
             <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-white p-4">
                 <h3 className="text-lg font-semibold">Product {num + 1}</h3>
