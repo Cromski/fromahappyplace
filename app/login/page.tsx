@@ -1,9 +1,45 @@
 "use client";
-import React, { useState } from "react";
-import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import {useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword} from 'react-firebase-hooks/auth'
+import {auth} from '@/app/firebase/config'
 
 export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+
+  const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
+
+  const router = useRouter();
+
+  const handleSignUp = async () => {
+    try {
+        const res = await createUserWithEmailAndPassword(email, password)
+        console.log({res})
+        setEmail('')
+        setPassword('')
+        router.push("/")
+    }
+    catch (e){
+        console.error(e)
+    }
+  }
+
+  const handleSignIn = async () => {
+    try {
+        const res = await signInWithEmailAndPassword(email, password)
+        console.log({res})
+        setEmail('')
+        setPassword('')
+        router.push("/")
+    } catch(e){
+        console.error(e)
+    }
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white px-4">
@@ -31,12 +67,14 @@ export default function LoginPage() {
 
           <input
             type="email"
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
             className="block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           />
 
           <input
             type="password"
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             className="block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           />
@@ -50,7 +88,7 @@ export default function LoginPage() {
           )}
 
           <button
-            onClick={() => alert("bingo")}
+            onClick={() => isSignUp ? handleSignUp() : handleSignIn()}
             className="w-full py-2 px-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition"
           >
             {isSignUp ? 'Sign Up' : 'Log In'}
