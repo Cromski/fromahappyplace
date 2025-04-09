@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar";
 import ClothesSquare from "./components/ClothesSquare";
 import { useAuthState } from "react-firebase-hooks/auth"
 import { auth, db } from '@/app/firebase/config'
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 interface UserData {
@@ -13,10 +13,19 @@ interface UserData {
   email: string,
 };
 
+export interface ClothingItem {
+  id: string;
+  Name: string;
+  price: number;
+  description: string;
+  images: string[];
+}
+
 export default function Home() {
 
   const [user, loading] = useAuthState(auth);
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [clothes, setClothes] = useState<ClothingItem[]>([]);
 
 
 
@@ -40,6 +49,27 @@ export default function Home() {
     fetchUserData();
   }, [user]);
 
+  useEffect(() => {
+    const fetchClothes = async () => {
+      const querySnapshot = await getDocs(collection(db, "clothing"));
+      const items: ClothingItem[] = [];
+
+      querySnapshot.forEach((doc: DocumentData) => {
+        const data = doc.data();
+        items.push({
+          id: doc.id,
+          Name: data.Name,
+          description: data.description,
+          price: data.price,
+          images: data.images,
+        });
+      });
+      setClothes(items);
+    };
+
+    fetchClothes();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900">
       {/* Navbar */}
@@ -55,12 +85,12 @@ export default function Home() {
       <section className="p-8">
         <h2 className="text-3xl font-bold text-center mb-6">Shop Our Collection</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {[...Array(8)].map((_, i) => (
-            <div 
-              key={i} 
+          {clothes.map((item) => (
+            <div
+              key={item.id}
               className="relative overflow-hidden bg-white shadow-lg rounded-lg group"
             >
-              <ClothesSquare num={i} />
+              <ClothesSquare item={item} />
             </div>
           ))}
         </div>
