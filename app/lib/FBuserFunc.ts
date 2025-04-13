@@ -1,5 +1,5 @@
 import {  db } from '@/app/firebase/config'
-import { doc, getDoc, getDocs, collection, DocumentData } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { User } from 'firebase/auth'
 
 export interface UserData {

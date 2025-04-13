@@ -1,5 +1,5 @@
 import { db } from "@/app/firebase/config";
-import { doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 type AddToCartOptions = {
     userId: string;

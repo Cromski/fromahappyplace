@@ -1,6 +1,6 @@
 "use client"
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, db } from '@/app/firebase/config'
+import { auth } from '@/app/firebase/config'
 import Navbar from "./components/Navbar";
 import "./globals.css";
 import { useUserStore } from "./stores/userStore";
