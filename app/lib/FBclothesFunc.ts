@@ -1,4 +1,4 @@
-import {  db } from '@/app/firebase/config'
+import { db } from '@/app/firebase/config'
 import { getDocs, collection, DocumentData } from "firebase/firestore";
 
 export interface ClothingItem {
@@ -32,6 +32,9 @@ export const fetchClothes = async () => {
     });
     return items
 };
+
+//jeg burde store alle billederne på hver variant, så behøver jeg ikke få en get til hoodie1 og derefter til variant også
+//men vent nej, fordi så får jeg alligevel ikke hoodie1.name
 
 //Get all variants from item id
 export const fetchVariants = async (itemId: string) => {
