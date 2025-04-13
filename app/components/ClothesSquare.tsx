@@ -1,70 +1,63 @@
 import Image from "next/image";
-import { ClothingItem } from "../page";
-// import { useCartStore } from "../stores/cartStore";
-import { useState } from "react";
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import { ClothingItem, fetchVariants, Variant } from "../lib/FBclothesFunc";
 
-// Define a type for the props that the ClothesSquare component will receive
 type MyComponentProps = {
-  item: ClothingItem;  // Expecting a single ClothingItem object
+  item: ClothingItem
 };
 
 const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const totalImages = item.images.length;
-//   const addToCart = useCartStore((state) => state.addToCart);
+  const [variants, setVariants] = useState<Variant[]>([]);
+  const [uniqueColors, setUniqueColors] = useState<string[]>([])
 
-  const prevImage = () => {
-    setCurrentIndex((prev) => (prev === 0 ? totalImages - 1 : prev - 1));
-  };
+  useEffect(() => {
+    const loadVariants = async () => {
+      const fetchedClothes = await fetchVariants(item.id);
+      setVariants(fetchedClothes);
+      setUniqueColors([...new Set(fetchedClothes.map((v) => v.color))])
+    };
+    loadVariants();
+  }, [item.id]);
 
-  const nextImage = () => {
-    setCurrentIndex((prev) => (prev === totalImages - 1 ? 0 : prev + 1));
-    console.log("aaa",item)
-  };
+  if (variants.length == 0) return null; //pretty much if it isnt loaded yet
 
-    // const handleAdd = () => {
-    //     addToCart({ ...product, quantity: 1 });
-    //   };
+  return (
+    <Link href={`/${item.id}_${variants[0].color}`} className="block group relative">
+      <div className="relative bg-white rounded-3xl shadow-xl overflow-hidden transition duration-300 group-hover:shadow-2xl w-full max-w-md mx-auto hover:scale-[1.02]">
+        {/* Image */}
+        <div className="relative h-80 w-full">
+          <Image
+            src={item.images[0]}
+            alt={item.Name}
+            fill
+            className="object-cover rounded-t-3xl transition-transform duration-300 group-hover:scale-105"
+          />
 
-    return (
-        <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden transition hover:shadow-2xl w-full max-w-md mx-auto">
-          {/* Image Carousel */}
-          <div className="relative h-80 w-full">
-            <Image
-              src={item.images[currentIndex]}
-              alt={item.Name}
-              fill
-              className="object-cover rounded-t-2xl"
-            />
-    
-            {/* Arrows */}
-            <button
-              onClick={prevImage}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60"
-            >
-              ◀
-            </button>
-            <button
-              onClick={nextImage}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60"
-            >
-              ▶
-            </button>
-          </div>
-    
-          {/* Details */}
-          <div className="p-6 text-center">
-            <h3 className="text-xl font-bold mb-2">{item.Name}</h3>
-            <p className="text-gray-600 text-md mb-4">${item.price.toFixed(2)}</p>
-    
-            <button
-              className="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-800 transition"
-            >
-              Add to Cart
-            </button>
+          {/* Color Swatches */}
+          <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            {uniqueColors.map((color) => (
+              <div
+                key={color}
+                onClick={(e) => e.stopPropagation()}
+                className="w-6 h-6 rounded-full border-2 border-white shadow-md hover:scale-110 transition-transform"
+                style={{
+                  backgroundColor: color,
+                }}
+                title={color}
+              />
+            ))}
           </div>
         </div>
-      );
-    };
-    
-    export default ClothesSquare;
+
+        {/* Details */}
+        <div className="p-6 text-center">
+          <h3 className="text-2xl font-semibold text-gray-800 mb-2">{item.Name}</h3>
+          <p className="text-gray-500 text-lg mb-2">{item.price.toFixed(2)} kr</p>
+        </div>
+      </div>
+    </Link>
+  );
+};
+
+export default ClothesSquare;
