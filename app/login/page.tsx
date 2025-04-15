@@ -12,6 +12,7 @@ export default function LoginPage() {
   const [cPassword, setCPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
 
   const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
   const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
@@ -26,6 +27,9 @@ export default function LoginPage() {
     if(password !== cPassword){
       alert("passwords must match")
       return
+    }
+    if(!agreeToTerms){
+      alert("You must agree to Terms of Service & Privacy Policy")
     }
     try {
         const userCredential = await createUserWithEmailAndPassword(email, password)
@@ -99,12 +103,21 @@ export default function LoginPage() {
           />
 
           {isSignUp && (
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              onChange={(e) => setCPassword(e.target.value)}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
+            <>
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                onChange={(e) => setCPassword(e.target.value)}
+                className="block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              />
+              <div className="flex">
+                <input
+                  type="checkbox"
+                  onChange={(e) => setAgreeToTerms(e.target.checked)}
+                />
+                <p className="ml-3 text-gray-500 text-xs">I’ve read and agree to the <a href="/terms-of-service" className="underline">Terms of Service</a> and <a href="/privacy-policy" className="underline">Privacy Policy</a>.</p>
+              </div>
+            </>
           )}
 
           <button
