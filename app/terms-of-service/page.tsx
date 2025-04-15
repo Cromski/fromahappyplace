@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 export default function TermsOfService() {
@@ -13,9 +14,9 @@ export default function TermsOfService() {
           <p>
             We’re an online clothing store. Our goal is to make shopping smooth, fun,
             and secure. If you have any questions, just reach out to us at{" "}
-            <a href="mailto:noEmail@yet.com" className="underline">
+            <Link href="mailto:noEmail@yet.com" className="underline">
               noEmail@yet.com
-            </a>
+            </Link>
             .
           </p>
         </div>
@@ -57,9 +58,9 @@ export default function TermsOfService() {
           <p className="mt-2">
             This data is securely stored using Firebase Firestore. For more on how we handle your info,
             see our{" "}
-            <a href="/privacy-policy" className="underline">
+            <Link href="/privacy-policy" className="underline">
               Privacy Policy
-            </a>
+            </Link>
             .
           </p>
         </div>
@@ -79,9 +80,9 @@ export default function TermsOfService() {
             If you're not happy with your order, you can request a return within 14 days of
             receiving it. Items must be unworn and in original condition. Email us to start a
             return:{" "}
-            <a href="mailto:noEmail@yet.com" className="underline">
+            <Link href="mailto:noEmail@yet.com" className="underline">
               noEmail@yet.com
-            </a>
+            </Link>
             .
           </p>
         </div>
@@ -98,9 +99,9 @@ export default function TermsOfService() {
           <h2 className="text-lg font-medium mb-2">8. Contact</h2>
           <p>
             Got questions or feedback? Reach us at{" "}
-            <a href="mailto:noEmail@yet.com" className="underline">
+            <Link href="mailto:noEmail@yet.com" className="underline">
               noEmail@yet.com
-            </a>
+            </Link>
             .
           </p>
         </div>

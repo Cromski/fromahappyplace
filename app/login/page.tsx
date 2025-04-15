@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import {useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword} from 'react-firebase-hooks/auth'
 import { auth, db } from '@/app/firebase/config'
 import { doc, setDoc } from "firebase/firestore";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -115,7 +116,7 @@ export default function LoginPage() {
                   type="checkbox"
                   onChange={(e) => setAgreeToTerms(e.target.checked)}
                 />
-                <p className="ml-3 text-gray-500 text-xs">I’ve read and agree to the <a href="/terms-of-service" className="underline">Terms of Service</a> and <a href="/privacy-policy" className="underline">Privacy Policy</a>.</p>
+                <p className="ml-3 text-gray-500 text-xs">I’ve read and agree to the <Link href="/terms-of-service" className="underline">Terms of Service</Link> and <Link href="/privacy-policy" className="underline">Privacy Policy</Link>.</p>
               </div>
             </>
           )}

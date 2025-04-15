@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 export default function PrivacyPolicy() {
@@ -73,7 +74,7 @@ export default function PrivacyPolicy() {
             </a>
             .
             <br/>
-            To delete your account, head over to your <a href="/profile" className="underline">profile</a>.
+            To delete your account, head over to your <Link href="/profile" className="underline">profile</Link>.
           </p>
         </div>
 

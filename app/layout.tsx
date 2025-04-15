@@ -16,7 +16,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
     if (!loading){
       setUser(user)
     }
-  }, [user, loading])
+  }, [user, loading, setUser])
 
   return (
     <html lang="en">
