@@ -12,11 +12,12 @@ export default function Home() {
   const [clothes, setClothes] = useState<ClothingItem[]>([]);
   const user = useUserStore((state) => state.user)
 
-  console.log(user)
+  console.log("ccccccc",user)
 
   useEffect(() =>{
     const loadUserInfo = async () => {
       const userInfo = await fetchUserData(user);
+      console.log("bbbbbb",userInfo)
       setUserData(userInfo)
     }
     loadUserInfo();
