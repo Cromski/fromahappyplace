@@ -14,10 +14,8 @@ const Navbar: React.FC<MyComponentProps> = ({user}) => {
 
     return (
         <nav className="flex justify-between items-center p-4 bg-white shadow-md">
-          <h1 className="text-2xl font-bold">From a happy place</h1>
+          <Link href={"/"}><h1 className="text-2xl font-bold">From a happy place</h1></Link>
           <ul className="flex space-x-4">
-            <li><Link href="#" className="hover:underline">Home</Link></li>
-            <li><Link href="#" className="hover:underline">Shop</Link></li>
             <li><Link href="#" className="hover:underline">About</Link></li>
             <li><Link href="#" className="hover:underline">Contact</Link></li>
             {user ?
