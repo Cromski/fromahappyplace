@@ -1,5 +1,5 @@
 import { db } from '@/app/firebase/config'
-import { getDocs, collection, DocumentData } from "firebase/firestore";
+import { getDocs, collection, DocumentData, getDoc, doc } from "firebase/firestore";
 
 export interface ClothingItem {
   id: string;
@@ -33,6 +33,29 @@ export const fetchClothes = async () => {
     return items
 };
 
+
+//Get one piece fromId
+export const fetchPiece = async (itemId: string) => {
+  const itemRef = doc(db, "clothing", itemId);
+  const docSnap = await getDoc(itemRef);
+
+  if (!docSnap.exists()) {
+    return null;
+  }
+
+  const data = docSnap.data();
+
+  const item: ClothingItem = {
+    id: docSnap.id,
+    Name: data.Name,
+    description: data.description,
+    price: data.price,
+    images: data.images,
+  };
+
+  return item;
+};
+
 //jeg burde store alle billederne på hver variant, så behøver jeg ikke få en get til hoodie1 og derefter til variant også
 //men vent nej, fordi så får jeg alligevel ikke hoodie1.name
 
@@ -49,6 +72,5 @@ export const fetchVariants = async (itemId: string) => {
         const size = data.size
         fetched.push({ id, color, size });
     });
-    console.log("aaaaaaaa",fetched)
     return fetched
 };
