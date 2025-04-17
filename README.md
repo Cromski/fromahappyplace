@@ -29,8 +29,8 @@ An independent, minimalistic clothing store built with modern web tech.
 
 ## 📄 Legal & Policies
 
-- [Terms of Service](/terms-of-service)
-- [Privacy Policy](/privacy-policy)
+- [Terms of Service](fromahappyplace.com/terms-of-service)
+- [Privacy Policy](fromahappyplace.com/privacy-policy)
 
 ---
 

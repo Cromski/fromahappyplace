@@ -77,7 +77,7 @@ export default function LoginPage() {
     }
     catch (e){
         alert("Something went wrong")
-        return
+        console.error(e)
       }
     }
 
