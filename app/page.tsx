@@ -4,24 +4,13 @@ import ClothesSquare from "./components/ClothesSquare";
 import { useEffect, useState } from "react";
 import { useUserStore } from "./stores/userStore";
 import { ClothingItem, fetchClothes } from "./lib/FBclothesFunc";
-import { fetchUserData, UserData } from "./lib/FBuserFunc";
 
 export default function Home() {
 
-  const [userData, setUserData] = useState<UserData | null | undefined>(null);
   const [clothes, setClothes] = useState<ClothingItem[]>([]);
-  const user = useUserStore((state) => state.user)
+  const user = useUserStore((state) => state.userData)
 
-  console.log("ccccccc",user)
-
-  useEffect(() =>{
-    const loadUserInfo = async () => {
-      const userInfo = await fetchUserData(user);
-      console.log("bbbbbb",userInfo)
-      setUserData(userInfo)
-    }
-    loadUserInfo();
-  }, [user]);
+  // console.log("ccccccc",user)
 
   useEffect(() => {
     const loadClothes = async () => {
@@ -37,7 +26,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative w-full h-[60vh] bg-gray-300 flex items-center justify-center">
         <Image src="/blyde-river-canyon.jpg" alt="Fashion" layout="fill" objectFit="cover" className="opacity-75" />
-        <h2 className="absolute text-5xl font-bold text-white drop-shadow-lg">Your new style is here{user && user != undefined ? ", " + userData?.first_name : ""}</h2>
+        <h2 className="absolute text-5xl font-bold text-white drop-shadow-lg">Your new style is here{user && user != undefined ? ", " + user.first_name : ""}</h2>
       </section>
       
       {/* Product Grid */}

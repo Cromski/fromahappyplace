@@ -4,6 +4,8 @@ import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { ClothingItem, fetchPiece, fetchVariants, Variant } from "../lib/FBclothesFunc"
 import { useRouter } from "next/navigation";
+import { addToCart } from "../services/cartService";
+import { useUserStore } from "../stores/userStore";
 
   
 export default function ProductPage() {
@@ -13,6 +15,9 @@ export default function ProductPage() {
     const [chosenSize, setChosenSize] = useState('')
     const [piece, setPiece] = useState<ClothingItem | null>(null)
     const [variants, setVariants] = useState<Variant[]>([])
+    const user = useUserStore((state) => state.userData)
+
+    // console.log("user: ",user)
 
     const handleColorChange = (color: string) => {
         setChosenColor(color);
@@ -75,34 +80,34 @@ export default function ProductPage() {
 
             {/* Info Section */}
             <div className="flex-1">
-            <h1 className="text-3xl font-bold mb-2">{piece.Name}</h1>
-            <p className="text-gray-700 mb-6">{piece.description}</p>
-            <h1 className="text-2xl font-medium mb-2">{piece.price} DKK</h1>
+                <h1 className="text-3xl font-bold mb-2">{piece.Name}</h1>
+                <p className="text-gray-700 mb-6">{piece.description}</p>
+                <h1 className="text-2xl font-medium mb-2">{piece.price} DKK</h1>
 
-            {/* Color Selector */}
-            <div className="mb-4">
-                <h2 className="font-medium mb-2">Select Color:</h2>
-                <div className="flex gap-2">
-                    {[...new Set(variants.map((v) => v.color.toLowerCase()))].map((color) => {
-                    const isSelected = chosenColor === color;
-                    return (
-                        <button
-                        key={color}
-                        onClick={() => handleColorChange(color)}
-                        className={`px-3 py-1 border rounded-full capitalize transition ${
-                            isSelected
-                            ? 'bg-black text-white border-black'
-                            : 'hover:bg-gray-100 border-gray-300 text-black'
-                        }`}
-                        >
-                        {color}
-                        </button>
-                    );
-                    })}
+                {/* Color Selector */}
+                <div className="mb-4">
+                    <h2 className="font-medium mb-2">Select Color:</h2>
+                    <div className="flex gap-2">
+                        {[...new Set(variants.map((v) => v.color.toLowerCase()))].map((color) => {
+                        const isSelected = chosenColor === color;
+                        return (
+                            <button
+                            key={color}
+                            onClick={() => handleColorChange(color)}
+                            className={`px-3 py-1 border rounded-full capitalize transition ${
+                                isSelected
+                                ? 'bg-black text-white border-black'
+                                : 'hover:bg-gray-100 border-gray-300 text-black'
+                            }`}
+                            >
+                            {color}
+                            </button>
+                        );
+                        })}
+                    </div>
                 </div>
-            </div>
 
-            {/* Size Selector */}
+                {/* Size Selector */}
                 {[...new Set(variants.map((v) => v.color.toLowerCase()))].includes(chosenColor) ? (
                 <div className="flex gap-2 flex-wrap">
                     {variants
@@ -126,6 +131,21 @@ export default function ProductPage() {
                 ) : (
                 <p className="text-sm text-gray-500 italic">Please select a color first</p>
                 )}
+                {/* Add to Cart Button */}
+                <div className="mt-6">
+                <button
+                    //onClick={() => addToCart({user, clothingId, variantId})} //{ userId, clothingId, variantId, quantity = 1 }
+                    disabled={!chosenColor || !chosenSize}
+                    className={`w-full px-4 py-2 rounded-md font-medium transition 
+                    ${
+                        chosenColor && chosenSize
+                        ? 'bg-black text-white hover:bg-gray-800'
+                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    }`}
+                >
+                    Add to Cart
+                </button>
+                </div>
             </div>
         </div>
     )

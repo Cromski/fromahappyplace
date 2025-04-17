@@ -1,14 +1,21 @@
 import { create } from 'zustand'
-import { User } from 'firebase/auth'
+
+export interface UserData {
+  id: string,
+  first_name: string,
+  last_name: string,
+  email: string,
+  cart: string[],
+};
 
 interface UserStore {
-  user: User | null | undefined
-  setUser: (user: User | undefined | null) => void
+  userData: UserData | null | undefined
+  setUserData: (user: UserData | undefined | null) => void
   clearUser: () => void
 }
 
 export const useUserStore = create<UserStore>((set) => ({
-  user: null,
-  setUser: (user) => set({ user }),
-  clearUser: () => set({ user: null }),
+  userData: null,
+  setUserData: (data) => set({ userData: data}),
+  clearUser: () => set({ userData: null }),
 }))

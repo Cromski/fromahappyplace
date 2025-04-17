@@ -5,18 +5,23 @@ import Navbar from "./components/Navbar";
 import "./globals.css";
 import { useUserStore } from "./stores/userStore";
 import { useEffect } from "react";
-
+import { fetchUserData } from "./lib/FBuserFunc";
 
 export default function RootLayout({children}: Readonly<{ children: React.ReactNode}>) 
 {
   const [user, loading] = useAuthState(auth);
-  const setUser = useUserStore((state) => state.setUser)
+  const setUserData = useUserStore((state) => state.setUserData)
 
   useEffect(() => {
     if (!loading){
-      setUser(user)
+      const loadUserInfo = async () => {
+        const userInfo = await fetchUserData(user);
+        console.log("bbbbbb",userInfo)
+        setUserData(userInfo)
+      }
+      loadUserInfo()
     }
-  }, [user, loading, setUser])
+  }, [user, loading, setUserData])
 
   return (
     <html lang="en">
