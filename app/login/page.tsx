@@ -22,7 +22,11 @@ export default function LoginPage() {
 
   const handleSignUp = async () => {
     if(firstName == '' || lastName == '' || email == '' || password == '' || cPassword == ''){
-      alert("You have to fill all inputs")
+      alert("You have to fill all fields")
+      return
+    }
+    if(cPassword.length < 6){
+      alert('password must be more than 6 characters')
       return
     }
     if(password !== cPassword){
@@ -31,10 +35,15 @@ export default function LoginPage() {
     }
     if(!agreeToTerms){
       alert("You must agree to Terms of Service & Privacy Policy")
+      return
     }
     try {
         const userCredential = await createUserWithEmailAndPassword(email, password)
-        console.log({userCredential})
+        if(userCredential == undefined){
+          alert('Error: try another email maybe')
+          return
+        }
+        console.log(userCredential)
         const user = userCredential?.user
         await setDoc(doc(db, "users", user!.uid), {
           first_name: firstName,
@@ -52,16 +61,25 @@ export default function LoginPage() {
   }
 
   const handleSignIn = async () => {
-    try {
-        const res = await signInWithEmailAndPassword(email, password)
-        console.log({res})
-        setEmail('')
-        setPassword('')
-        router.push("/")
-    } catch(e){
-        console.error(e)
+    if(email == '' || password == ''){
+      alert("You have to fill all fields")
+      return
     }
-  }
+    try{
+      const res = await signInWithEmailAndPassword(email, password)
+      if(res == undefined){
+        alert('email or password is not correct')
+        return
+      }
+      setEmail('')
+      setPassword('')
+      router.push("/")
+    }
+    catch (e){
+        alert("Something went wrong")
+        return
+      }
+    }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white px-4">
@@ -76,6 +94,9 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="First Name"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSignIn()
+                }}
                 onChange={(e) => setFirstName(e.target.value)}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
@@ -83,6 +104,9 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="Last Name"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSignIn()
+                }}
                 onChange={(e) => setLastName(e.target.value)}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
@@ -93,6 +117,9 @@ export default function LoginPage() {
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSignIn()
+            }}
             className="block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           />
 
@@ -100,6 +127,9 @@ export default function LoginPage() {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSignIn()
+            }}
             className="block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           />
 
@@ -109,6 +139,9 @@ export default function LoginPage() {
                 type="password"
                 placeholder="Confirm Password"
                 onChange={(e) => setCPassword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSignUp()
+                }}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
               <div className="flex">
