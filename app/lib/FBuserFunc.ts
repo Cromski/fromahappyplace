@@ -1,5 +1,5 @@
 import {  db } from '@/app/firebase/config'
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { User } from 'firebase/auth'
 import { UserData } from '../stores/userStore';
 
@@ -8,17 +8,20 @@ import { UserData } from '../stores/userStore';
   
     const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
+    const userCartRef = collection(db, "users", user.uid, "cartItems")
+    const userCartSnap = await getDocs(userCartRef)
   
     if (userSnap.exists()) {
       const data = userSnap.data();
   
+      const cartItems = userCartSnap.docs.map(doc => doc.id);
       // Return data extended with uid as `id`
       const userData: UserData = {
         id: user.uid,
         first_name: data.first_name || "",
         last_name: data.last_name || "",
         email: data.email || "",
-        cart: data.cart || [], // default to empty cart if undefined
+        cart: cartItems || [], // default to empty cart if undefined
       };
   
       return userData;

@@ -1,5 +1,6 @@
 import { db } from '@/app/firebase/config'
 import { getDocs, collection, DocumentData, getDoc, doc } from "firebase/firestore";
+import { cartInfo } from '../stores/userStore';
 
 export interface ClothingItem {
   id: string;

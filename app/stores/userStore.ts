@@ -1,5 +1,11 @@
 import { create } from 'zustand'
 
+export interface cartInfo {
+  clothingId: string,
+  quantity: number,
+  variantId: string,
+};
+
 export interface UserData {
   id: string,
   first_name: string,

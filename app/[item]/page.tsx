@@ -17,7 +17,13 @@ export default function ProductPage() {
     const [variants, setVariants] = useState<Variant[]>([])
     const user = useUserStore((state) => state.userData)
 
-    // console.log("user: ",user)
+    const handleAddToCart = () => { //{ userId, clothingId, variantId, quantity = 1 }
+        addToCart(user!.id, piece!.id, `${chosenColor}_${chosenSize}`)
+    } 
+
+    useEffect(() => {
+        console.log("[item] -> user: ",user)
+    },[user])
 
     const handleColorChange = (color: string) => {
         setChosenColor(color);
@@ -30,8 +36,8 @@ export default function ProductPage() {
         const loadPieceAndVariants = async () =>{
             const fetchedPiece = await fetchPiece(clothesId);
             const fetchedVariants = await fetchVariants(clothesId);
-            console.log("aaaaaaaa",fetchedVariants)
-            console.log("bbbbbbbb",fetchedPiece)
+            console.log("[item] -> fetchedVariants: ",fetchedVariants)
+            console.log("[item] -> fetchedPiece: ",fetchedPiece)
             setPiece(fetchedPiece)
             setVariants(fetchedVariants)
         }
@@ -134,7 +140,7 @@ export default function ProductPage() {
                 {/* Add to Cart Button */}
                 <div className="mt-6">
                 <button
-                    //onClick={() => addToCart({user, clothingId, variantId})} //{ userId, clothingId, variantId, quantity = 1 }
+                    onClick={() => handleAddToCart()}
                     disabled={!chosenColor || !chosenSize}
                     className={`w-full px-4 py-2 rounded-md font-medium transition 
                     ${

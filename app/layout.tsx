@@ -16,7 +16,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
     if (!loading){
       const loadUserInfo = async () => {
         const userInfo = await fetchUserData(user);
-        console.log("bbbbbb",userInfo)
+        console.log("Layout.tsx -> userInfo",userInfo)
         setUserData(userInfo)
       }
       loadUserInfo()

@@ -43,7 +43,7 @@ export default function LoginPage() {
           alert('Error: try another email maybe')
           return
         }
-        console.log(userCredential)
+        console.log("Login -> userCredential: ",userCredential)
         const user = userCredential?.user
         await setDoc(doc(db, "users", user!.uid), {
           first_name: firstName,

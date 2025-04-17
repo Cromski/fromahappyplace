@@ -1,14 +1,14 @@
 import { db } from "@/app/firebase/config";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
-type AddToCartOptions = {
-    userId: string;
-    clothingId: string;
-    variantId: string;
-    quantity?: number; // defaults to 1 if not provided
-  };
+// interface AddToCartOptions {
+//     userId: string;
+//     clothingId: string;
+//     variantId: string;
+//     quantity?: number; // defaults to 1 if not provided
+//   };
 
-  export async function addToCart({ userId, clothingId, variantId, quantity = 1 }: AddToCartOptions): Promise<void> {
+  export async function addToCart(userId: string, clothingId: string, variantId: string, quantity:number = 1): Promise<void> {
     try {
       const docId = `${clothingId}_${variantId}`;
       const cartItemRef = doc(db, "users", userId, "cartItems", docId);
@@ -28,7 +28,7 @@ type AddToCartOptions = {
         });
       }
   
-      console.log(`✅ Added ${quantity} of ${clothingId} (${variantId}) to ${userId}'s cart`);
+      console.log(`cartService.ts -> ✅ Added ${quantity} of ${clothingId} (${variantId}) to ${userId}'s cart`);
     } catch (error) {
       console.error("❌ Failed to add to cart:", error);
       throw error;
