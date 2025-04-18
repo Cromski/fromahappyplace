@@ -1,7 +1,7 @@
 import {  db } from '@/app/firebase/config'
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { User } from 'firebase/auth'
-import { UserData } from '../stores/userStore';
+import { cartInfo, UserData } from '../stores/userStore';
 
   export const fetchUserData = async (user: User | null | undefined): Promise<UserData | null> => {
     if (!user) return null;
@@ -14,7 +14,10 @@ import { UserData } from '../stores/userStore';
     if (userSnap.exists()) {
       const data = userSnap.data();
   
-      const cartItems = userCartSnap.docs.map(doc => doc.id);
+      const cartItems = userCartSnap.docs.map(doc => ({
+        id: doc.id,
+        data: doc.data() as cartInfo, 
+      }));
       // Return data extended with uid as `id`
       const userData: UserData = {
         id: user.uid,
