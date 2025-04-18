@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
-import ClothesSquare from "./components/ClothesSquare";
+import ClothesSquare from "@components/ClothesSquare";
 import { useEffect, useState } from "react";
-import { useUserStore } from "./stores/userStore";
-import { ClothingItem, fetchClothes } from "./lib/FBclothesFunc";
+import { useUserStore } from "@stores/userStore";
+import { ClothingItem, fetchClothes } from "@lib/FBclothesFunc";
 
 export default function Home() {
 

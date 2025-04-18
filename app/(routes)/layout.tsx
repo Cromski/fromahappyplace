@@ -1,11 +1,11 @@
 "use client"
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from '@/app/firebase/config'
-import Navbar from "./components/Navbar";
+import { auth } from '@firebase/config'
+import Navbar from "@components/Navbar";
 import "./globals.css";
-import { useUserStore } from "./stores/userStore";
+import { useUserStore } from "@stores/userStore";
 import { useEffect } from "react";
-import { fetchUserData } from "./lib/FBuserFunc";
+import { fetchUserData } from "@lib/FBuserFunc";
 
 export default function RootLayout({children}: Readonly<{ children: React.ReactNode}>) 
 {

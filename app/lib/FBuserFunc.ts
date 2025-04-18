@@ -1,4 +1,4 @@
-import {  db } from '@/app/firebase/config'
+import {  db } from '@firebase/config'
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { User } from 'firebase/auth'
 import { cartInfo, UserData } from '../stores/userStore';

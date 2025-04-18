@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword} from 'react-firebase-hooks/auth'
-import { auth, db } from '@/app/firebase/config'
+import { auth, db } from '@firebase/config'
 import { doc, setDoc } from "firebase/firestore";
 import Link from "next/link";
 

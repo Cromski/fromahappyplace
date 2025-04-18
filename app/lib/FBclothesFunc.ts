@@ -1,4 +1,4 @@
-import { db } from '@/app/firebase/config'
+import { db } from '@firebase/config'
 import { getDocs, collection, DocumentData, getDoc, doc } from "firebase/firestore";
 
 export interface ClothingItem {

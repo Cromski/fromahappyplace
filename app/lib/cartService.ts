@@ -1,4 +1,4 @@
-import { db } from "@/app/firebase/config";
+import { db } from "@firebase/config";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 export async function addToCart(userId: string, clothingId: string, variantId: string, quantity:number = 1): Promise<void> {
