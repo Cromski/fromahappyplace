@@ -6,6 +6,7 @@ import { ClothingItem, fetchPiece, fetchVariants, Variant } from "../lib/FBcloth
 import { useRouter } from "next/navigation";
 import { addToCart } from "../services/cartService";
 import { useUserStore } from "../stores/userStore";
+import Image from "next/image";
 
   
 export default function ProductPage() {
@@ -42,7 +43,7 @@ export default function ProductPage() {
             setVariants(fetchedVariants)
         }
         loadPieceAndVariants()
-    },[])
+    },[params.item])
 
 
     if (!piece){
@@ -64,9 +65,11 @@ export default function ProductPage() {
             {/* Image Section */}
             <div className="flex-1">
             <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden">
-                <img
+                <Image
                 src={piece.images[0]}
                 alt={piece.Name}
+                width="500"
+                height="500"
                 className="object-cover w-full h-full"
                 />
             </div>
@@ -74,10 +77,12 @@ export default function ProductPage() {
             {/* Optional thumbnails */}
             <div className="flex mt-4 gap-2">
                 {piece?.images.map((img, index) => (
-                <img
+                <Image
                     key={index}
                     src={img}
                     alt={`thumbnail-${index}`}
+                    width="64"
+                    height="64"
                     className="w-16 h-16 rounded-lg object-cover border border-gray-300"
                 />
                 ))}
