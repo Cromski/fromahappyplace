@@ -26,7 +26,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
   return (
     <html lang="en">
       <body>
-        <Navbar user={!loading ? user : null} />
+        <Navbar />
         {children}
       </body>
     </html>
