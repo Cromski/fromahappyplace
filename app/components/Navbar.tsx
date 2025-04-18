@@ -1,8 +1,7 @@
-import { User } from "firebase/auth";
-import { auth } from "@/app/firebase/config"
+import { auth } from "@firebase/config"
 import { useSignOut } from "react-firebase-hooks/auth"
 import Link from "next/link";
-import { useUserStore } from "../stores/userStore";
+import { useUserStore } from "@stores/userStore";
 
 
 const Navbar = () => {

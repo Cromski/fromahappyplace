@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { ClothingItem, fetchVariants, Variant } from "../lib/FBclothesFunc";
+import { ClothingItem, fetchVariants, Variant } from "@lib/FBclothesFunc";
 
 type MyComponentProps = {
   item: ClothingItem
