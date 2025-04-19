@@ -23,7 +23,7 @@ const ShoppingCart = () => {
 
         {pieceInfo !== null ? user?.cart.map((item) => (
             <div key={item.data.variantId}>
-                <ShoppingCartSquare item={item.data} pieceInfo={pieceInfo} />
+                <ShoppingCartSquare userId={user.id} item={item.data} pieceInfo={pieceInfo} />
             </div>
         )) : 
             <p>loading...</p>

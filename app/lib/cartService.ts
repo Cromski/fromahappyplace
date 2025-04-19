@@ -1,5 +1,5 @@
 import { db } from "@firebase/config";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 export async function addToCart(userId: string, clothingId: string, variantId: string, quantity:number = 1): Promise<void> {
   try {
@@ -25,5 +25,15 @@ export async function addToCart(userId: string, clothingId: string, variantId: s
   } catch (error) {
     console.error("❌ Failed to add to cart:", error);
     throw error;
+  }
+}
+
+export async function removeFromCart(userId: string, clothingId: string, variantId: string) :Promise<void> {
+  const cartItemRef = doc(db, "users", userId, "cartItems", `${clothingId}_${variantId}`)
+  try {
+    await deleteDoc(cartItemRef);
+    console.log(`Item ${cartItemRef} removed from cart.`);
+  } catch (error) {
+    console.error("Error removing item from cart:", error);
   }
 }

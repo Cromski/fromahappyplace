@@ -2,17 +2,19 @@ import { ClothingItem } from "@lib/FBclothesFunc";
 import { cartInfo } from "@stores/userStore";
 import { useState } from "react";
 import Image from "next/image";
+import { removeFromCart } from "@lib/cartService";
 
 type MyProps = {
+    userId: string;
     item: cartInfo;
     pieceInfo: ClothingItem | null;
   };
   
-  const ShoppingCartSquare: React.FC<MyProps> = ({ item, pieceInfo }) => {
+  const ShoppingCartSquare: React.FC<MyProps> = ({ userId, item, pieceInfo }) => {
     const [quantityVar, setQuantityVar] = useState(item.quantity)
 
     return (
-        <div className="w-2/3 mx-auto my-3 p-4 bg-gray-100 rounded-xl shadow-lg flex items-center space-x-4">
+        <div className="w-2/3 relative mx-auto my-3 p-4 bg-gray-100 rounded-xl shadow-lg flex items-center space-x-4">
             {/* Image */}
             <div className="w-20 h-20 bg-gray-300 rounded-xl overflow-hidden">
               <Image
@@ -24,6 +26,12 @@ type MyProps = {
               />
             </div>
     
+            <button 
+              onClick={() => removeFromCart(userId, item.clothingId, item.variantId)}
+              className=" absolute right-2 top-2 text-gray-400 hover:text-red-500 transition-colors text-lg cursor-pointer"
+              >
+                &times;
+              </button>
             {/* Item details */}
             <div className="flex-1">
               <div className="font-semibold text-lg">{pieceInfo?.Name} ({item.variantId})</div>
