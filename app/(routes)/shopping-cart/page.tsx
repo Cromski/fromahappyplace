@@ -20,11 +20,14 @@ const ShoppingCart = () => {
 
     return (
         <div className="space-y-4">
-        {user?.cart.map((item) => (
+
+        {pieceInfo !== null ? user?.cart.map((item) => (
             <div key={item.data.variantId}>
                 <ShoppingCartSquare item={item.data} pieceInfo={pieceInfo} />
             </div>
-        ))}
+        )) : 
+            <p>loading...</p>
+        }
       </div>
     )
 }
