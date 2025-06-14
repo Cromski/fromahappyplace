@@ -9,12 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^3.7.0",
+    "@stripe/stripe-js": "^7.3.1",
+    "anchor-pki": "^0.3.2",
     "firebase": "^11.6.0",
-    "next": "15.2.4",
+    "next": "^15.3.3",
     "postcss": "^8.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-firebase-hooks": "^5.1.1",
+    "stripe": "^18.2.1",
     "zustand": "^5.0.3"
   },
   "devDependencies": {

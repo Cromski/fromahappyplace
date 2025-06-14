@@ -3,12 +3,14 @@ import ShoppingCartSquare from "@components/ShoppingCartSquare"
 import { ClothingItem, fetchPiece } from "@lib/FBclothesFunc"
 import { useUserStore } from "@stores/userStore"
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation";
 
 
 const ShoppingCart = () => {
     const user = useUserStore((state) => state.userData)
     const [pieceInfo, setPieceInfo] = useState<ClothingItem | null>(null)
     const [totalAmount, setTotalAmount] = useState(0)
+    const router = useRouter()
 
     
     useEffect(() => {
@@ -46,7 +48,7 @@ const ShoppingCart = () => {
                         </div>
 
                         <button
-                            onClick={() => alert('Videre til checkout :)')}
+                            onClick={() => router.push('/payment')}
                             className="mt-4 bg-black text-white py-2 px-4 rounded-xl hover:bg-gray-800 transition-colors"
                         >
                             Checkout

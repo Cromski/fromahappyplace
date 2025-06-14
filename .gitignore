@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# lcl hosting //for https localhost
+tmp
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
