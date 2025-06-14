@@ -23,7 +23,7 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative w-full h-[60vh] bg-gray-300 flex items-center justify-center">
-        <Image src="/blyde-river-canyon.jpg" alt="Fashion" layout="fill" objectFit="cover" className="opacity-75" />
+        <Image src="/better-blyde.png" alt="Fashion" layout="fill" objectFit="cover" className="opacity-75" />
         <h2 className="absolute text-5xl font-bold text-white drop-shadow-lg">Your new style is here{user && user != undefined ? ", " + user.first_name : ""}</h2>
       </section>
       
