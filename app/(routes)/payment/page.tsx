@@ -6,15 +6,18 @@ import { useEffect, useState } from "react";
 import Pay from "@components/Pay";
 import convertToSubcurrency from "@lib/convertToSubcurrency";
 import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import { Stripe, loadStripe } from "@stripe/stripe-js";
 
 const PaymentPage = () => {
-    const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!)
+    const [stripePromise, setStripePromise] = useState<Stripe | PromiseLike<Stripe | null> | null>(null);
     const user = useUserStore((state) => state.userData)
     const [pieceInfo, setPieceInfo] = useState<ClothingItem | null>(null)
     const [totalAmount, setTotalAmount] = useState(0)
 
-    
+    useEffect(() => {
+        setStripePromise(loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!))
+    }, [])
+
     useEffect(() => {
         const loadPieces = async () => {
             const piece = await fetchPiece("hoodie1")
