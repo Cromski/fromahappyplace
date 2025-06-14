@@ -39,6 +39,11 @@ jobs:
           NEXT_PUBLIC_FIREBARE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBARE_STORAGE_BUCKET }}
           NEXT_PUBLIC_FIREBASE_MESSAGIN_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGIN_SENDER_ID }}
           NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
+          NEXT_PUBLIC_STRIPE_PUBLIC_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}
+          NEXT_PUBLIC_STRIPE_PUBLIC_KEY_LIVE: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY_LIVE }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_SECRET_KEY_LIVE: ${{ secrets.STRIPE_SECRET_KEY_LIVE }}
+
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
