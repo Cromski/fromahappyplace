@@ -84,7 +84,10 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
             src={filteredImages[imageIndex].url}
             alt={item.name}
             fill
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover "
+            quality={70}
+            priority
             />
 
         </div>
