@@ -13,9 +13,12 @@ export default function ProductPage() {
     const params = useParams<{item: string}>()
     const router = useRouter()
     const [chosenColor, setChosenColor] = useState('')
+    const [uniqueColors, setUniqueColors] = useState<string[]>([])
     const [chosenSize, setChosenSize] = useState('')
     const [piece, setPiece] = useState<ClothingItem | null>(null)
     const [variants, setVariants] = useState<Variant[]>([])
+    const [sizeCollection, setSizeCollection] = useState<Record<string, string[]>>({})
+    const sizeOrder = ["S","M","L","XL"];
     const user = useUserStore((state) => state.userData)
 
     const handleAddToCart = () => { //{ userId, clothingId, variantId, quantity = 1 }
@@ -33,7 +36,7 @@ export default function ProductPage() {
 
     useEffect(() => {
         const [clothesUrl, color] = params.item.split("_")
-        console.log
+        console.log("AAAA: ", clothesUrl,color)
         setChosenColor(color)
         const loadPieceAndVariants = async () =>{
             const clothesId = await getClothingBySlug(clothesUrl)
@@ -43,11 +46,36 @@ export default function ProductPage() {
             console.log("[item] -> fetchedVariants: ",fetchedVariants)
             console.log("[item] -> fetchedPiece: ",fetchedPiece)
             setPiece(fetchedPiece)
-            setVariants(fetchedVariants)
+            setVariants(fetchedVariants.sort((a,b) => a.order - b.order))
+            setUniqueColors([...new Set(fetchedVariants.map((v )=> v.color))])
+
+            const sizeMap = fetchedVariants.reduce((acc, item) => {
+                if (!acc[item.color]) acc[item.color] = [];
+
+                acc[item.color].push(item.size);
+
+                return acc;
+            }, {} as Record<string, string[]>);
+
+            Object.keys(sizeMap).forEach(color => {
+                sizeMap[color].sort((a, b) =>
+                sizeOrder.indexOf(a) - sizeOrder.indexOf(b)
+                );
+            });
+
+            setSizeCollection(sizeMap)
         }
         loadPieceAndVariants()
     },[params.item])
 
+    useEffect(() => {
+        if(uniqueColors.length > 0 && !chosenColor) {
+            const firstColor = uniqueColors[0]
+            setChosenColor(firstColor)
+            if (!piece) return
+            router.replace(piece.url+"_"+firstColor)
+        }
+    }, [uniqueColors])
 
     if (!piece){
         return (
@@ -102,12 +130,12 @@ export default function ProductPage() {
                 <div className="mb-4">
                     <h2 className="font-medium mb-2">Select Color:</h2>
                     <div className="flex gap-2">
-                        {[...new Set(variants.map((v) => v.color.toLowerCase()))].map((color) => {
+                        {uniqueColors.map((color) => {
                         const isSelected = chosenColor === color;
                         return (
                             <button
                             key={color}
-                            onClick={() => handleColorChange(color,)}
+                            onClick={() => handleColorChange(color)}
                             className={`px-3 py-1 border rounded-full capitalize transition ${
                                 isSelected
                                 ? 'bg-black text-white border-black'
@@ -122,23 +150,30 @@ export default function ProductPage() {
                 </div>
 
                 {/* Size Selector */}
-                {[...new Set(variants.map((v) => v.color.toLowerCase()))].includes(chosenColor) ? (
+                {chosenColor ? (
                 <div className="flex gap-2 flex-wrap">
-                    {variants
-                    .filter((v) => v.color.toLowerCase() === chosenColor)
-                    .map((v) => {
+                    {sizeOrder
+                    .map((size) => {
                         // Check if the size is the one selected
-                        const isSelected = v.size === chosenSize;
+                        const isSelected = size === chosenSize;
                         
                         return (
-                        <button
-                            key={v.id}
-                            className={`px-3 py-1 border rounded-md uppercase transition 
-                            ${isSelected ? 'bg-black text-white' : 'hover:bg-gray-100'}`}
-                            onClick={() => setChosenSize(v.size)} // Update the chosen size when clicked
-                        >
-                            {v.size}
-                        </button>
+                        sizeCollection[chosenColor].includes(size) ?
+                            <button
+                                key={size}
+                                className={`px-3 py-1 border rounded-md uppercase transition cursor-pointer
+                                ${isSelected ? 'bg-black text-white' : 'hover:bg-gray-100'}`}
+                                onClick={() => setChosenSize(size)} // Update the chosen size when clicked
+                            >
+                                {size}
+                            </button>
+                        :
+                            <div
+                            key={size}
+                            className="px-3 py-1 border border-gray-300 text-gray-300 rounded-md uppercase transition"
+                            >
+                                {size}
+                            </div>
                         );
                     })}
                 </div>

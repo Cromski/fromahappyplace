@@ -22,10 +22,10 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
   useEffect(() => {
     const loadVariants = async () => {
       console.log("XD", item.id)
-      const fetchedClothes = await fetchVariants(item.id);
-      setVariants(fetchedClothes.sort((a,b) => a.order - b.order));
-      setSelectedColor(fetchedClothes[0].color)
-      const sizeMap = fetchedClothes.reduce((acc, item) => {
+      const fetchedVariants = await fetchVariants(item.id);
+      setVariants(fetchedVariants.sort((a,b) => a.order - b.order));
+      setSelectedColor(fetchedVariants[0].color)
+      const sizeMap = fetchedVariants.reduce((acc, item) => {
         if (!acc[item.color]) acc[item.color] = [];
 
         acc[item.color].push(item.size);
@@ -41,7 +41,7 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
 
       setSizeCollection(sizeMap)
       console.log("yes: ",sizeMap)
-      setUniqueColors([...new Set(fetchedClothes.map((v) => v.color))])
+      setUniqueColors([...new Set(fetchedVariants.map((v) => v.color))])
     };
     loadVariants();
   }, [item.id]);
@@ -58,7 +58,7 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
     onMouseEnter={() => setHovered(true)}
     onMouseLeave={() => setHovered(false)}
     >
-      <Link href={item.url} className="">
+      <Link href={item.url+"_"+selectedColor} className="">
           {/* Image */}
         <div className="relative h-full aspect-4/5 shadow-xl w-full max-w-md mx-auto">
           <Image
