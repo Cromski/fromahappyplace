@@ -1,0 +1,1 @@
+export const sizeOrder = ["S","M","L","XL"];

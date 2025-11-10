@@ -10,6 +10,7 @@ export interface ClothingItem {
   images: {
     url: string,
     order: number,
+    color: string,
   }[],
 }
 

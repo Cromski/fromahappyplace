@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useUserStore } from "@stores/userStore";
 import { ClothingItem, fetchVariants, Variant } from "@lib/FBclothesFunc";
 import { addToCart, getVariantByColorAndSize } from "@lib/cartService";
+import { sizeOrder } from "@lib/constants";
 
 type MyComponentProps = {
   item: ClothingItem
@@ -15,9 +16,10 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
   const [uniqueColors, setUniqueColors] = useState<string[]>([])
   const [selectedColor, setSelectedColor] = useState<string>("")
   const [sizeCollection, setSizeCollection] = useState<Record<string, string[]>>({})
-  const [images, setImages] = useState<{ url: string, order: number}[]>(item.images.sort((a, b) => a.order - b.order))
-  const [hovered, setHovered] = useState<Boolean>(false)
-  const sizeOrder = ["S","M","L","XL"];
+  const [images, setImages] = useState<{ url: string, order: number, color: string}[]>(item.images.sort((a, b) => a.order - b.order))
+  const [filteredImages, setFilteredImages] = useState<{ url: string, order: number, color: string}[]>([])
+  const [imageIndex, setImageIndex] = useState<number>(0)
+  const [hovered, setHovered] = useState<Boolean>(false)  
 
   useEffect(() => {
     const loadVariants = async () => {
@@ -46,12 +48,29 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
     loadVariants();
   }, [item.id]);
 
+  useEffect(() => {
+    setImageIndex(0)
+    setFilteredImages(images.filter(img => img.color === selectedColor))
+  }, [selectedColor])
+
   const handleAddToCart = async (clothingId: string, color: string, size: string) => {
     const variant = await getVariantByColorAndSize(clothingId, color, size)
     addToCart(user!.id, clothingId, variant!.id)
   }
 
   if (variants.length == 0) return null; //pretty much if it isnt loaded yet
+
+  const prevImage = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setImageIndex((i) => (i > 0 ? i - 1 : filteredImages.length - 1))
+  }
+
+  const nextImage = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setImageIndex((i) => (i < filteredImages.length - 1 ? i + 1 : 0))
+  }
+
+  if(filteredImages.length === 0) return <div>no images</div>
 
   return (
     <div className="block group relative"
@@ -62,7 +81,7 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
           {/* Image */}
         <div className="relative h-full aspect-4/5 shadow-xl w-full max-w-md mx-auto">
           <Image
-            src={images[0].url}
+            src={filteredImages[imageIndex].url}
             alt={item.name}
             fill
             className="object-cover "
@@ -70,6 +89,18 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
 
         </div>
       </Link>  
+        <button
+        onClick={prevImage}
+        className="absolute left-3 top-1/2 -translate-y-1/2 px-2 py-1"
+        >
+          <span className="text-white text-2xl drop-shadow-[0_0_4px_rgba(0,0,0,0.6)]">❮</span>
+        </button>
+        <button
+        onClick={nextImage}
+        className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-1"
+        >
+          <span className="text-white text-2xl drop-shadow-[0_0_4px_rgba(0,0,0,0.6)]">❯</span>
+        </button>
         {/* Details */}
       <div className="text-left h-25">
         { !hovered ?

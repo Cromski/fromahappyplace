@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { addToCart } from "@lib/cartService";
 import { useUserStore } from "@stores/userStore";
 import Image from "next/image";
+import { sizeOrder } from "@lib/constants";
 
   
 export default function ProductPage() {
@@ -18,7 +19,6 @@ export default function ProductPage() {
     const [piece, setPiece] = useState<ClothingItem | null>(null)
     const [variants, setVariants] = useState<Variant[]>([])
     const [sizeCollection, setSizeCollection] = useState<Record<string, string[]>>({})
-    const sizeOrder = ["S","M","L","XL"];
     const user = useUserStore((state) => state.userData)
 
     const handleAddToCart = () => { //{ userId, clothingId, variantId, quantity = 1 }
