@@ -1,8 +1,8 @@
 import { ClothingItem, fetchPiece, getVariant, Variant } from "@lib/FBclothesFunc";
-import { cartInfo } from "@stores/userStore";
-import { useEffect, useState } from "react";
+import { cartInfo, useUserStore } from "@stores/userStore";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { removeFromCart } from "@lib/cartService";
+import { removeFromCart, updateCartQuantity } from "@lib/cartService";
 import Link from "next/link";
 
 type MyProps = {
@@ -13,9 +13,11 @@ type MyProps = {
   };
   
   const ShoppingCartSquare: React.FC<MyProps> = ({ userId, clothingId, variantId, quantity }) => {
+    const user = useUserStore((state) => state.userData)
     const [quantityVar, setQuantityVar] = useState(quantity)
     const [metaData, setMetaData] = useState<ClothingItem | null>(null)
     const [variantData, setVariantData] = useState<Variant | null>(null)
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
       ( async () => {
@@ -30,6 +32,16 @@ type MyProps = {
     }, [clothingId, variantId])
 
     if(!metaData || !variantData) return <h1>loading...</h1>
+
+    const debouncedUpdateCartQuantityInDB = (q: number) => {
+      
+      if (timerRef.current) clearTimeout(timerRef.current)
+      
+      timerRef.current = setTimeout(() => {
+        updateCartQuantity(userId, clothingId, variantId, q)
+        .catch((err) => console.error("failed update", err));
+      },500)
+    }
 
     return (
         <div className="relative my-3 p-4 bg-gray-100 rounded-xl shadow-lg flex items-center space-x-4">
@@ -67,9 +79,15 @@ type MyProps = {
                     <span className="font-bold mr-2">Quantity:</span>
                     <input
                     type="number"
-                    defaultValue={quantity}
+                    value={quantityVar}
                     min="0"
-                    onChange={(e) => setQuantityVar(Math.max(0, parseInt(e.target.value, 10)))}
+                    onChange={(e) => {
+                      const q = Math.max(0, Number(e.target.value));   // safe parse
+                      setQuantityVar(q);
+                      useUserStore.getState().setCartQuantity(clothingId, variantId, q); // update store
+                      if(q === 0) return removeFromCart(userId, metaData.id, variantData.id)
+                      debouncedUpdateCartQuantityInDB(q)
+                    }}
                     className="w-16 text-center p-1 border rounded-md text-sm"
                     />
                 </div>

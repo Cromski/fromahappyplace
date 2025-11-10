@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 
 const ShoppingCart = () => {
     const user = useUserStore((state) => state.userData)
+    // const [cart, setCart] = useState(user!.cart)
     // const [pieceInfo, setPieceInfo] = useState<ClothingItem | null>(null)
     const [totalAmount, setTotalAmount] = useState(0)
     const router = useRouter()
@@ -16,7 +17,7 @@ const ShoppingCart = () => {
         const loadPieces = async () => {
             if(!user) return
 
-            let total = totalAmount
+            let total = 0
             for (const cartItem of user.cart) {
                 const piece = await fetchPiece(cartItem.data.clothingId);
                 total += piece!.price * cartItem.data.quantity;

@@ -46,11 +46,23 @@ export async function getVariantByColorAndSize(clothingId: string, color: string
   };
 }
 
+export async function updateCartQuantity(userId: string, clothingId: string, variantId: string, quantity: number) {
+  const ref = doc(db, "users", userId, "cartItems", clothingId+"_"+variantId)
+  const snap = await getDoc(ref)
+
+  if(!snap.exists()) {
+    return await addToCart(userId, clothingId, variantId, quantity)
+  }
+
+  await setDoc(ref, { quantity }, { merge: true })
+  console.log(`✅ Cart quantity updated → ${clothingId+"_"+variantId}: ${quantity}`);
+}
+
 export async function removeFromCart(userId: string, clothingId: string, variantId: string) :Promise<void> {
   const cartItemRef = doc(db, "users", userId, "cartItems", `${clothingId}_${variantId}`)
   try {
     await deleteDoc(cartItemRef);
-    console.log(`Item ${cartItemRef} removed from cart.`);
+    console.log("Item ",cartItemRef," removed from cart.");
   } catch (error) {
     console.error("Error removing item from cart:", error);
   }
