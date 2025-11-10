@@ -18,9 +18,9 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ clientSecret: paymentIntent.client_secret})
 
     } catch (error) {
-        console.error("Internal Error: (route.ts)", error)
+        console.error("Megaa dårlig Internal Error: (route.ts)", error)
         return NextResponse.json(
-            { error: `Internal Server Error: ${error}`},
+            { error: `Mega dårlig Internal Server Error fra (route.ts): ${error}`},
             { status: 500 }
         )
     }

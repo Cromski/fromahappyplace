@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { ClothingItem, fetchPiece, fetchVariants, Variant } from "@lib/FBclothesFunc"
+import { ClothingItem, fetchPiece, fetchVariants, getClothingBySlug, Variant } from "@lib/FBclothesFunc"
 import { useRouter } from "next/navigation";
 import { addToCart } from "@lib/cartService";
 import { useUserStore } from "@stores/userStore";
@@ -28,15 +28,18 @@ export default function ProductPage() {
 
     const handleColorChange = (color: string) => {
         setChosenColor(color);
-        router.push(`/${piece?.id}_${color}`);
+        router.push(`/${piece?.url}_${color}`);
     };
 
     useEffect(() => {
-        const [clothesId, color] = params.item.split("_")
+        const [clothesUrl, color] = params.item.split("_")
+        console.log
         setChosenColor(color)
         const loadPieceAndVariants = async () =>{
-            const fetchedPiece = await fetchPiece(clothesId);
-            const fetchedVariants = await fetchVariants(clothesId);
+            const clothesId = await getClothingBySlug(clothesUrl)
+            if(!clothesId) return
+            const fetchedPiece = await fetchPiece(clothesId.id);
+            const fetchedVariants = await fetchVariants(clothesId.id);
             console.log("[item] -> fetchedVariants: ",fetchedVariants)
             console.log("[item] -> fetchedPiece: ",fetchedPiece)
             setPiece(fetchedPiece)
@@ -66,8 +69,8 @@ export default function ProductPage() {
             <div className="flex-1">
             <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden">
                 <Image
-                src={piece.images[0]}
-                alt={piece.Name}
+                src={piece.images[0].url}
+                alt={piece.name}
                 width="500"
                 height="500"
                 className="object-cover w-full h-full"
@@ -79,7 +82,7 @@ export default function ProductPage() {
                 {piece?.images.map((img, index) => (
                 <Image
                     key={index}
-                    src={img}
+                    src={img.url}
                     alt={`thumbnail-${index}`}
                     width="64"
                     height="64"
@@ -91,7 +94,7 @@ export default function ProductPage() {
 
             {/* Info Section */}
             <div className="flex-1">
-                <h1 className="text-3xl font-bold mb-2">{piece.Name}</h1>
+                <h1 className="text-3xl font-bold mb-2">{piece.name}</h1>
                 <p className="text-gray-700 mb-6">{piece.description}</p>
                 <h1 className="text-2xl font-medium mb-2">{piece.price} DKK</h1>
 
@@ -104,7 +107,7 @@ export default function ProductPage() {
                         return (
                             <button
                             key={color}
-                            onClick={() => handleColorChange(color)}
+                            onClick={() => handleColorChange(color,)}
                             className={`px-3 py-1 border rounded-full capitalize transition ${
                                 isSelected
                                 ? 'bg-black text-white border-black'

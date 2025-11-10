@@ -1,27 +1,44 @@
-import { ClothingItem } from "@lib/FBclothesFunc";
+import { ClothingItem, fetchPiece, getVariant, Variant } from "@lib/FBclothesFunc";
 import { cartInfo } from "@stores/userStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { removeFromCart } from "@lib/cartService";
 import Link from "next/link";
 
 type MyProps = {
     userId: string;
-    item: cartInfo;
-    pieceInfo: ClothingItem | null;
+    clothingId: string;
+    variantId: string;
+    quantity: number;
   };
   
-  const ShoppingCartSquare: React.FC<MyProps> = ({ userId, item, pieceInfo }) => {
-    const [quantityVar, setQuantityVar] = useState(item.quantity)
+  const ShoppingCartSquare: React.FC<MyProps> = ({ userId, clothingId, variantId, quantity }) => {
+    const [quantityVar, setQuantityVar] = useState(quantity)
+    const [metaData, setMetaData] = useState<ClothingItem | null>(null)
+    const [variantData, setVariantData] = useState<Variant | null>(null)
+
+    useEffect(() => {
+      ( async () => {
+        const meta = await fetchPiece(clothingId);
+        const variant = await getVariant(clothingId, variantId);
+        setMetaData(meta);
+        setVariantData(variant);
+        console.log("METADATA: ", meta)
+        console.log("VARIANTDATA: ", variant)
+      })();
+
+    }, [clothingId, variantId])
+
+    if(!metaData || !variantData) return <h1>loading...</h1>
 
     return (
         <div className="relative my-3 p-4 bg-gray-100 rounded-xl shadow-lg flex items-center space-x-4">
             {/* Image */}
             <div className="w-20 h-20 bg-gray-300 rounded-xl overflow-hidden">
-              <Link href={`/${item.clothingId}_${item.variantId}`}>
+              <Link href={`/${metaData!.url}_${variantData?.url}`}>
                 <Image
-                  src={pieceInfo!.images[0]} // Replace with actual image if available
-                  alt={pieceInfo!.Name}
+                  src={metaData.images[0].url} // Replace with actual image if available
+                  alt={metaData.images[0].url}
                   width={100}
                   height={100}
                   className="object-cover w-full h-full"
@@ -30,7 +47,7 @@ type MyProps = {
             </div>
     
             <button 
-              onClick={() => removeFromCart(userId, item.clothingId, item.variantId)}
+              onClick={() => removeFromCart(userId, metaData.id, variantData.id)}
               className=" absolute right-2 top-2 text-gray-400 hover:text-red-500 transition-colors text-lg cursor-pointer"
               >
                 &times;
@@ -38,11 +55,11 @@ type MyProps = {
 
             {/* Item details */}
             <div className="flex-1">
-              <Link href={`/${item.clothingId}_${item.variantId}`}>
-                <div className="font-semibold text-lg">{pieceInfo?.Name} ({item.variantId})</div>
-                <div className="text-gray-500">{pieceInfo?.description}</div>
+              <Link href={`/${metaData!.url}_${variantData?.url}`}>
+                <div className="font-semibold text-lg">{metaData.name} ({variantData.color+"-"+variantData.size})</div>
+                <div className="text-gray-500">{metaData.description}</div>
                 <div className="mt-2 text-sm text-gray-700">
-                  <span className="font-bold">Price:</span> DKK {pieceInfo?.price.toFixed(2)}
+                  <span className="font-bold">Price:</span> DKK {metaData.price.toFixed(2)}
                 </div>
               </Link>
               {/* Quantity Input */}
@@ -50,7 +67,7 @@ type MyProps = {
                     <span className="font-bold mr-2">Quantity:</span>
                     <input
                     type="number"
-                    defaultValue={quantityVar}
+                    defaultValue={quantity}
                     min="0"
                     onChange={(e) => setQuantityVar(Math.max(0, parseInt(e.target.value, 10)))}
                     className="w-16 text-center p-1 border rounded-md text-sm"
@@ -61,7 +78,7 @@ type MyProps = {
             {/* Price and Quantity */}
             <div className="text-right">
               <div className="text-xl font-semibold text-gray-900">
-                DKK {(pieceInfo!.price * quantityVar).toFixed(2)}
+                DKK {(metaData!.price * quantityVar).toFixed(2)}
               </div>
             </div>
           </div>
