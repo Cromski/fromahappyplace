@@ -12,9 +12,9 @@ import Image from "next/image";
 export default function ProductPage() {
     const params = useParams<{item: string}>()
     const router = useRouter()
-    const [chosenColor, setChosenColor] = useState('')
+    const [chosenColor, setChosenColor] = useState("")
     const [uniqueColors, setUniqueColors] = useState<string[]>([])
-    const [chosenSize, setChosenSize] = useState('')
+    const [chosenSize, setChosenSize] = useState("")
     const [piece, setPiece] = useState<ClothingItem | null>(null)
     const [variants, setVariants] = useState<Variant[]>([])
     const [sizeCollection, setSizeCollection] = useState<Record<string, string[]>>({})
@@ -31,7 +31,8 @@ export default function ProductPage() {
 
     const handleColorChange = (color: string) => {
         setChosenColor(color);
-        router.push(`/${piece?.url}_${color}`);
+        setChosenSize("")
+        window.history.replaceState(null, "", `/${piece!.url}_${color}`)
     };
 
     useEffect(() => {
