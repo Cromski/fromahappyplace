@@ -1,6 +1,6 @@
 "use client"
 import ShoppingCartSquare from "@components/ShoppingCartSquare"
-import { ClothingItem, fetchPiece, getVariant, Variant } from "@lib/FBclothesFunc"
+import { fetchPiece } from "@lib/FBclothesFunc"
 import { useUserStore } from "@stores/userStore"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation";

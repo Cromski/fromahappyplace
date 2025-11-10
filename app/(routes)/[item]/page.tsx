@@ -17,7 +17,6 @@ export default function ProductPage() {
     const [uniqueColors, setUniqueColors] = useState<string[]>([])
     const [chosenSize, setChosenSize] = useState("")
     const [piece, setPiece] = useState<ClothingItem | null>(null)
-    const [variants, setVariants] = useState<Variant[]>([])
     const [sizeCollection, setSizeCollection] = useState<Record<string, string[]>>({})
     const user = useUserStore((state) => state.userData)
 
@@ -47,7 +46,7 @@ export default function ProductPage() {
             console.log("[item] -> fetchedVariants: ",fetchedVariants)
             console.log("[item] -> fetchedPiece: ",fetchedPiece)
             setPiece(fetchedPiece)
-            setVariants(fetchedVariants.sort((a,b) => a.order - b.order))
+            fetchedVariants.sort((a,b) => a.order - b.order)
             setUniqueColors([...new Set(fetchedVariants.map((v )=> v.color))])
 
             const sizeMap = fetchedVariants.reduce((acc, item) => {

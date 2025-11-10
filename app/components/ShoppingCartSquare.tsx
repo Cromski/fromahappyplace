@@ -1,5 +1,5 @@
 import { ClothingItem, fetchPiece, getVariant, Variant } from "@lib/FBclothesFunc";
-import { cartInfo, useUserStore } from "@stores/userStore";
+import { useUserStore } from "@stores/userStore";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { removeFromCart, updateCartQuantity } from "@lib/cartService";
@@ -13,7 +13,6 @@ type MyProps = {
   };
   
   const ShoppingCartSquare: React.FC<MyProps> = ({ userId, clothingId, variantId, quantity }) => {
-    const user = useUserStore((state) => state.userData)
     const [quantityVar, setQuantityVar] = useState(quantity)
     const [metaData, setMetaData] = useState<ClothingItem | null>(null)
     const [variantData, setVariantData] = useState<Variant | null>(null)

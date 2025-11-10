@@ -11,7 +11,6 @@ import { Stripe, loadStripe } from "@stripe/stripe-js";
 const PaymentPage = () => {
     const [stripePromise, setStripePromise] = useState<Stripe | PromiseLike<Stripe | null> | null>(null);
     const user = useUserStore((state) => state.userData)
-    const [pieceInfo, setPieceInfo] = useState<ClothingItem | null>(null)
     const [totalAmount, setTotalAmount] = useState(0)
 
     useEffect(() => {
@@ -21,8 +20,6 @@ const PaymentPage = () => {
     useEffect(() => {
         const loadPieces = async () => {
             const piece = await fetchPiece("hoodie1")
-            setPieceInfo(piece)
-            console.log(pieceInfo) //only here to make ESLINT happy for now
             console.log("shopping cart -> pieceInfo: ", piece)
             if (!user) return
             const total = user!.cart.reduce((total, cartItem) => {

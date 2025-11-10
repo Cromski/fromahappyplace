@@ -16,10 +16,10 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
   const [uniqueColors, setUniqueColors] = useState<string[]>([])
   const [selectedColor, setSelectedColor] = useState<string>("")
   const [sizeCollection, setSizeCollection] = useState<Record<string, string[]>>({})
-  const [images, setImages] = useState<{ url: string, order: number, color: string}[]>(item.images.sort((a, b) => a.order - b.order))
+  const images: { url: string, order: number, color: string}[] = (item.images.sort((a, b) => a.order - b.order))
   const [filteredImages, setFilteredImages] = useState<{ url: string, order: number, color: string}[]>([])
   const [imageIndex, setImageIndex] = useState<number>(0)
-  const [hovered, setHovered] = useState<Boolean>(false)  
+  const [hovered, setHovered] = useState<boolean>(false)  
 
   useEffect(() => {
     const loadVariants = async () => {
