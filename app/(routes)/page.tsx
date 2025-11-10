@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import ClothesSquare from "@components/ClothesSquare";
 import { useEffect, useState } from "react";
 import { useUserStore } from "@stores/userStore";

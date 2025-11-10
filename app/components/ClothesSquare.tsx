@@ -51,7 +51,7 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
   useEffect(() => {
     setImageIndex(0)
     setFilteredImages(images.filter(img => img.color === selectedColor))
-  }, [selectedColor])
+  }, [selectedColor, images])
 
   const handleAddToCart = async (clothingId: string, color: string, size: string) => {
     const variant = await getVariantByColorAndSize(clothingId, color, size)

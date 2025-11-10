@@ -1,5 +1,5 @@
 "use client"
-import { ClothingItem, fetchPiece } from "@lib/FBclothesFunc";
+import { fetchPiece } from "@lib/FBclothesFunc";
 import { useUserStore } from "@stores/userStore";
 import { useEffect, useState } from "react";
 

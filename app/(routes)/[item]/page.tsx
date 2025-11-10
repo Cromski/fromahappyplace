@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { ClothingItem, fetchPiece, fetchVariants, getClothingBySlug, Variant } from "@lib/FBclothesFunc"
+import { ClothingItem, fetchPiece, fetchVariants, getClothingBySlug } from "@lib/FBclothesFunc"
 import { useRouter } from "next/navigation";
 import { addToCart } from "@lib/cartService";
 import { useUserStore } from "@stores/userStore";
