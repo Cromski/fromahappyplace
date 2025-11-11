@@ -20,7 +20,6 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
   const [filteredImages, setFilteredImages] = useState<{ fullUrl: string, tinyBase64: string, order: number, color: string}[]>([])
   const [imageIndex, setImageIndex] = useState<number>(0)
   const [hovered, setHovered] = useState<boolean>(false)  
-  const isFirstImage = imageIndex === 0;
 
   useEffect(() => {
     const loadVariants = async () => {
@@ -52,21 +51,12 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
   useEffect(() => {
     setImageIndex(0)
     setFilteredImages(images.filter(img => img.color === selectedColor))
-    console.log("CCCCC: ",images.filter(img => img.color === selectedColor))
   }, [selectedColor, images])
 
   const handleAddToCart = async (clothingId: string, color: string, size: string) => {
     const variant = await getVariantByColorAndSize(clothingId, color, size)
     addToCart(user!.id, clothingId, variant!.id)
   }
-  useEffect(() => {
-    const nextIndex = imageIndex + 1 < filteredImages.length ? imageIndex + 1 : 0
-    const next = filteredImages[nextIndex]
-    if (next) {
-      const img2 = new window.Image();
-      img2.src = next.fullUrl
-    }
-  }, [imageIndex, filteredImages])
 
   if (variants.length == 0) return null; //pretty much if it isnt loaded yet
 
@@ -100,7 +90,7 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
             quality={70}
             placeholder={filteredImages[imageIndex]?.tinyBase64 ? "blur" : undefined}
             blurDataURL={filteredImages[imageIndex]?.tinyBase64}
-            priority={isFirstImage}
+            priority
             />
 
         </div>
