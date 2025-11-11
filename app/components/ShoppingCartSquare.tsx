@@ -48,8 +48,8 @@ type MyProps = {
             <div className="w-20 h-20 bg-gray-300 rounded-xl overflow-hidden">
               <Link href={`/${metaData!.url}_${variantData?.url}`}>
                 <Image
-                  src={metaData.images[0].url} // Replace with actual image if available
-                  alt={metaData.images[0].url}
+                  src={metaData.images[0].fullUrl} // Replace with actual image if available
+                  alt={metaData.images[0].fullUrl}
                   width={100}
                   height={100}
                   className="object-cover w-full h-full"

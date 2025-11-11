@@ -8,7 +8,8 @@ export interface ClothingItem {
   price: number;
   description: string;
   images: {
-    url: string,
+    fullUrl: string,
+    tinyBase64: string,
     order: number,
     color: string,
   }[],

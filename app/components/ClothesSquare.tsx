@@ -16,10 +16,11 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
   const [uniqueColors, setUniqueColors] = useState<string[]>([])
   const [selectedColor, setSelectedColor] = useState<string>("")
   const [sizeCollection, setSizeCollection] = useState<Record<string, string[]>>({})
-  const images: { url: string, order: number, color: string}[] = (item.images.sort((a, b) => a.order - b.order))
-  const [filteredImages, setFilteredImages] = useState<{ url: string, order: number, color: string}[]>([])
+  const images: { fullUrl: string, tinyBase64: string, order: number, color: string}[] = (item.images.sort((a, b) => a.order - b.order))
+  const [filteredImages, setFilteredImages] = useState<{ fullUrl: string, tinyBase64: string, order: number, color: string}[]>([])
   const [imageIndex, setImageIndex] = useState<number>(0)
   const [hovered, setHovered] = useState<boolean>(false)  
+  const isFirstImage = imageIndex === 0;
 
   useEffect(() => {
     const loadVariants = async () => {
@@ -51,14 +52,24 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
   useEffect(() => {
     setImageIndex(0)
     setFilteredImages(images.filter(img => img.color === selectedColor))
+    console.log("CCCCC: ",images.filter(img => img.color === selectedColor))
   }, [selectedColor, images])
 
   const handleAddToCart = async (clothingId: string, color: string, size: string) => {
     const variant = await getVariantByColorAndSize(clothingId, color, size)
     addToCart(user!.id, clothingId, variant!.id)
   }
+  useEffect(() => {
+    const nextIndex = imageIndex + 1 < filteredImages.length ? imageIndex + 1 : 0
+    const next = filteredImages[nextIndex]
+    if (next) {
+      const img2 = new window.Image();
+      img2.src = next.fullUrl
+    }
+  }, [imageIndex, filteredImages])
 
   if (variants.length == 0) return null; //pretty much if it isnt loaded yet
+
 
   const prevImage = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -81,13 +92,15 @@ const ClothesSquare: React.FC<MyComponentProps> = ({ item }) => {
           {/* Image */}
         <div className="relative h-full aspect-4/5 shadow-xl w-full max-w-md mx-auto">
           <Image
-            src={filteredImages[imageIndex].url}
+            src={filteredImages[imageIndex].fullUrl}
             alt={item.name}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover "
             quality={70}
-            priority
+            placeholder={filteredImages[imageIndex]?.tinyBase64 ? "blur" : undefined}
+            blurDataURL={filteredImages[imageIndex]?.tinyBase64}
+            priority={isFirstImage}
             />
 
         </div>

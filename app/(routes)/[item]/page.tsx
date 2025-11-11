@@ -97,7 +97,7 @@ export default function ProductPage() {
             <div className="flex-1">
             <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden">
                 <Image
-                src={piece.images[0].url}
+                src={piece.images[0].fullUrl}
                 alt={piece.name}
                 width="500"
                 height="500"
@@ -110,7 +110,7 @@ export default function ProductPage() {
                 {piece?.images.map((img, index) => (
                 <Image
                     key={index}
-                    src={img.url}
+                    src={img.fullUrl}
                     alt={`thumbnail-${index}`}
                     width="64"
                     height="64"
